@@ -27,10 +27,10 @@ app.use((req, res) => {
       <html>
         <head>
           <meta charset="utf-8">
-          <title>Isomorphic Redux Demo</title>
+          <title>Adam D. Graham's Blog Party</title>
         </head>
         <body>
-          <div id="react-view">${componentHTML}</div>
+          <div id="app">${componentHTML}</div>
           <script type="application/javascript" src="/bundle.js"></script>
         </body>
       </html>

@@ -1,15 +1,15 @@
-var path    = require('path');
+var path = require('path');
 var webpack = require('webpack');
 
 module.exports = {
   entry:  [
-    'webpack-dev-server/client?http://127.0.0.1:8080/',
     'webpack/hot/only-dev-server',
-    './client'
+    './client/index.jsx'
   ],
   output: {
-    path:     path.join(__dirname, 'dist'),
-    filename: 'bundle.js'
+    path:     path.join(__dirname, 'static'),
+    filename: 'bundle.js',
+    publicPath: '/static/'
   },
   resolve: {
     modulesDirectories: ['node_modules', 'shared'],
@@ -20,20 +20,22 @@ module.exports = {
       {
         test:    /\.jsx?$/,
         exclude: /node_modules/,
-        loaders: ['react-hot', 'babel']
+        loaders: ['react-hot', 'babel'],
+        include: __dirname
+      },
+      {
+        test: /\.scss$/,
+        loaders: ["style", "css", "sass"]
       }
     ]
   },
   plugins: [
+    new webpack.optimize.OccurrenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoErrorsPlugin()
   ],
   devtool: 'inline-source-map',
   devServer: {
-    hot: true,
-    proxy: {
-      '*': 'http://127.0.0.1:' + (process.env.PORT || 3000)
-    },
-    host: '127.0.0.1'
+    hot: true
   }
 };

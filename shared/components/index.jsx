@@ -8,7 +8,7 @@ export default class App extends React.Component {
   render() {
     return (
       <div id="app-view">
-        <h1>Todos</h1>
+        <h1>Adam D. Graham's Blog Party</h1>
         <hr />
         {this.props.children}
       </div>
