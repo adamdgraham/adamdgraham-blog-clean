@@ -7,6 +7,8 @@ import routes from '../shared/routes';
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+app.use(express.static(__dirname + '/static'));
+
 app.use((req, res) => {
   match({ routes, location: req.url }, (err, redirectLocation, renderProps) => {
     if (err) {
@@ -31,7 +33,7 @@ app.use((req, res) => {
         </head>
         <body>
           <div id="app">${componentHTML}</div>
-          <script type="application/javascript" src="/bundle.js"></script>
+          <script type="application/javascript" src="bundle.js"></script>
         </body>
       </html>
     `;
