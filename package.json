@@ -10,7 +10,7 @@
   },
   "main": "index.js",
   "scripts": {
-    "start": "NODE_PATH=$NODE_PATH:./shared node .",
+    "start": "node server/index.js",
     "dev": "npm run start & webpack-dev-server --progress --color",
     "build": "NODE_ENV=production webpack --progress --color -p --config webpack.prod.config.js",
     "test": "echo \"Error: no test specified\" && exit 1"

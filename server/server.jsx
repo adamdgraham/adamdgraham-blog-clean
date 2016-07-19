@@ -1,8 +1,8 @@
 import express from 'express';
 import React from 'react';
 import { renderToString } from 'react-dom/server'
-import { RoutingContext, match } from 'react-router';
-import routes from 'routes';
+import { RouterContext, match } from 'react-router';
+import routes from '../shared/routes';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -19,7 +19,7 @@ app.use((req, res) => {
     }
 
     const InitialComponent = (
-      <RoutingContext {...renderProps} />
+      <RouterContext {...renderProps} />
     );
     const componentHTML = renderToString(InitialComponent);
     const HTML = `
