@@ -1,7 +1,11 @@
 import express from 'express';
 import React from 'react';
-import { renderToString } from 'react-dom/server'
+import { Provider } from 'react-redux';
 import { RouterContext, match } from 'react-router';
+import { renderToString } from 'react-dom/server'
+import { createStore } from 'redux'
+
+import blogReducer from '../shared/reducers';
 import routes from '../shared/routes';
 
 const app = express();
@@ -10,6 +14,14 @@ const PORT = process.env.PORT || 3000;
 app.use(express.static(__dirname + '/static'));
 
 app.use((req, res) => {
+  // initial state should really be pulled from the backend...
+  const initialState = {
+    loading: true, // Set false when done loading blog entries from back end.
+    pages: [{content: 'Dummy content', creation_date: null}], // Blog content.
+    currentPage: null // Current blog entry ID. Not needed for other static content.
+  };
+  const store = createStore(blogReducer, initialState);
+
   match({ routes, location: req.url }, (err, redirectLocation, renderProps) => {
     if (err) {
       console.error(err);
@@ -21,11 +33,14 @@ app.use((req, res) => {
     }
 
     const InitialComponent = (
-      <RouterContext {...renderProps} />
+      <Provider store={store}>
+        <RouterContext {...renderProps} />
+      </Provider>
     );
     const componentHTML = renderToString(InitialComponent);
-    const HTML = `
-      <!DOCTYPE html>
+    // Grab the initial state from our Redux store
+    const initialState = store.getState();
+    const HTML = `<!DOCTYPE html>
       <html>
         <head>
           <meta charset="utf-8">
@@ -52,6 +67,7 @@ app.use((req, res) => {
         </head>
         <body>
           <div id="app">${componentHTML}</div>
+          <script> window.__INITIAL_STATE__ = ${JSON.stringify(initialState)} </script>
           <script src="/js/jquery.min.js"></script>
           <script src="/js/bootstrap.min.js"></script>
           <script src="/js/clean-blog.min.js"></script>
